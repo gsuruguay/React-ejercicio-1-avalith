@@ -1,25 +1,34 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import { ProductList } from './Components/productList';
+import Catalogue from "./Components/Catalogue/Catalogue";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component{
+
+  state={
+    products: ProductList,
+    isChecked: false
+  }
+
+  productInStock = this.state.products.filter( prod => prod.stock === true);
+  sortByStock = [...this.state.products].sort((x, y) => y.stock - x.stock);
+
+  checkStock= ()=>{
+    this.setState({isChecked: !this.state.isChecked})
+  }
+
+  render(){
+    return (
+      <div className="container">
+        <input type="checkbox" onChange={this.checkStock} /> Mostrar solo stock disponible
+        <div className="row">
+        {this.state.isChecked ? <Catalogue products={this.productInStock} /> : <Catalogue products={this.sortByStock} />}
+      </div>
+      </div>
+    );
+    
+  }
 }
 
 export default App;
